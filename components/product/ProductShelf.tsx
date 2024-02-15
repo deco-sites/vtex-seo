@@ -59,7 +59,7 @@ function ProductShelf({
   return (
     <div class="w-full container py-8 flex flex-col gap-6 lg:py-10">
       <Header
-        title={title || ""}
+        title={title || "Promotional Items"}
         description={description || ""}
         fontSize={layout?.headerfontSize || "Large"}
         alignment={layout?.headerAlignment || "center"}
@@ -85,6 +85,7 @@ function ProductShelf({
                 layout={cardLayout}
                 platform={platform}
                 index={index}
+                shelf={true}
               />
             </Slider.Item>
           ))}

@@ -54,6 +54,7 @@ interface Props {
 
   layout?: Layout;
   platform?: Platform;
+  shelf?: boolean;
 }
 
 const WIDTH = 200;
@@ -66,6 +67,7 @@ function ProductCard({
   layout,
   platform,
   index,
+  shelf,
 }: Props) {
   const { url, productID, name, image: images, offers, isVariantOf } = product;
   const id = `product-card-${productID}`;
@@ -272,10 +274,21 @@ function ProductCard({
                   ""
                 )
                 : (
-                  <h2
-                    class="truncate text-base lg:text-lg text-base-content uppercase font-normal"
-                    dangerouslySetInnerHTML={{ __html: name ?? "" }}
-                  />
+                  <div>
+                    {shelf
+                      ? (
+                        <h3
+                          class="truncate text-base lg:text-lg text-base-content uppercase font-normal"
+                          dangerouslySetInnerHTML={{ __html: name ?? "" }}
+                        />
+                      )
+                      : (
+                        <h2
+                          class="truncate text-base lg:text-lg text-base-content uppercase font-normal"
+                          dangerouslySetInnerHTML={{ __html: name ?? "" }}
+                        />
+                      )}
+                  </div>
                 )}
               {l?.hide?.productDescription
                 ? (
