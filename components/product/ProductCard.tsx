@@ -89,7 +89,7 @@ function ProductCard({
     const relativeLink = relative(link);
     return (
       <li>
-        <a href={relativeLink}>
+        <strong>
           <Avatar
             variant={relativeLink === relativeUrl
               ? "active"
@@ -98,13 +98,13 @@ function ProductCard({
               : "disabled"}
             content={value}
           />
-        </a>
+        </strong>
       </li>
     );
   });
   const cta = (
     <a
-      href={url && relative(url)}
+      href={url?.replace(/\?.*$/, "")}
       aria-label="view product"
       class="btn btn-block"
     >
@@ -191,7 +191,7 @@ function ProductCard({
 
         {/* Product Images */}
         <a
-          href={url && relative(url)}
+          href={url?.replace(/\?.*$/, "")}
           aria-label="view product"
           class="grid grid-cols-1 grid-rows-1 w-full"
         >
