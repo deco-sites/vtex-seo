@@ -39,6 +39,38 @@
     @apply border-l border-transparent duration-200 whitespace-pre-line text-center;
     @apply flex flex-col items-center justify-start gap-8 py-10 px-8 lg:px-12;
   }
+  
+  #hero-text h2 {
+    @apply text-lg font-semibold text-[24px] py-2;
+  }
+
+  #hero-text h3 {
+    @apply text-base font-medium text-[22px] py-2;
+  }
+
+  #hero-text h4 {
+    @apply text-sm font-medium text-[20px] py-2;
+  }
+
+  #hero-text h5 {
+    @apply font-medium text-[18px] py-2;
+  }
+
+  #hero-text strong {
+    @apply font-bold;
+  }
+
+  #hero-text ol {
+    @apply list-decimal px-4;
+  }
+
+  #hero-text ul {
+    @apply list-disc px-4;
+  }
+
+  #hero-text a {
+    @apply underline decoration-solid;
+  }
 }
 
 .group:disabled .group-disabled\:animate-progress {
