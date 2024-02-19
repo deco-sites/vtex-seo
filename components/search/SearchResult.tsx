@@ -22,12 +22,15 @@ export interface Layout {
 
 export interface Props {
   /** @title Integration */
-  page: ProductListingPage | null;
+  page?: ProductListingPage | null;
   layout?: Layout;
   cardLayout?: CardLayout;
 
   /** @description 0 for ?page=0 as your first page */
   startingPage?: 0 | 1;
+
+  /** @description max nunber of items in pagination */
+  maxVisiblePages?: number;
 }
 
 function NotFound() {
@@ -43,14 +46,30 @@ function Result({
   layout,
   cardLayout,
   startingPage = 0,
+  maxVisiblePages = 5,
 }: Omit<Props, "page"> & { page: ProductListingPage }) {
   const { products, filters, breadcrumb, pageInfo, sortOptions } = page;
   const perPage = pageInfo.recordPerPage || products.length;
+
+  const currentPage = pageInfo.currentPage ?? 1;
+  const totalPages = pageInfo.recordPerPage ? pageInfo.recordPerPage - 1 : 0;
 
   const id = useId();
 
   const zeroIndexedOffsetPage = pageInfo.currentPage - startingPage;
   const offset = zeroIndexedOffsetPage * perPage;
+
+  const pages = [];
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+  if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
+  }
 
   return (
     <>
@@ -78,23 +97,32 @@ function Result({
         </div>
 
         <div class="flex justify-center my-4">
-          <div class="join">
+          <div class="join gap-2">
             <a
               aria-label="previous page link"
+              disabled={currentPage <= 1}
               rel="prev"
-              href={pageInfo.previousPage ?? "#"}
-              class="btn btn-ghost join-item"
+              href={`?page=${currentPage - 1}`}
+              class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-2 border border-gray-400 rounded-full shadow"
             >
               <Icon id="ChevronLeft" size={24} strokeWidth={2} />
             </a>
-            <span class="btn btn-ghost join-item">
-              Page {zeroIndexedOffsetPage + 1}
-            </span>
+            {pages.map((page) => (
+              <a
+                key={page}
+                href={`?page=${page}`}
+                disabled={currentPage == page}
+                class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded-full shadow"
+              >
+                {page}
+              </a>
+            ))}
             <a
               aria-label="next page link"
+              disabled={currentPage >= totalPages}
               rel="next"
-              href={pageInfo.nextPage ?? "#"}
-              class="btn btn-ghost join-item"
+              href={`?page=${currentPage + 1}`}
+              class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-2 border border-gray-400 rounded-full shadow"
             >
               <Icon id="ChevronRight" size={24} strokeWidth={2} />
             </a>
