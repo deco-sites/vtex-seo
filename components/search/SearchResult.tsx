@@ -8,7 +8,7 @@ import { useOffer } from "$store/sdk/useOffer.ts";
 import type { ProductListingPage } from "apps/commerce/types.ts";
 import { mapProductToAnalyticsItem } from "apps/commerce/utils/productToAnalyticsItem.ts";
 import ProductGallery, { Columns } from "../product/ProductGallery.tsx";
-import HeroSeo from "./HeroSeo.tsx"
+import HeroSeo from "./HeroSeo.tsx";
 
 export interface Layout {
   /**
