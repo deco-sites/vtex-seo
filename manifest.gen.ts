@@ -14,7 +14,7 @@ import * as $$$$$$6 from "./sections/Content/CallToAction.tsx";
 import * as $$$$$$7 from "./sections/Content/Faq.tsx";
 import * as $$$$$$8 from "./sections/Content/Features.tsx";
 import * as $$$$$$9 from "./sections/Content/Hero.tsx";
-import * as $$$$$$10 from "./sections/Content/HeroSEO.tsx";
+import * as $$$$$$10 from "./sections/Content/HeroSeo.tsx";
 import * as $$$$$$11 from "./sections/Content/ImageSection.tsx";
 import * as $$$$$$12 from "./sections/Content/Logos.tsx";
 import * as $$$$$$13 from "./sections/Content/RichText.tsx";
@@ -69,7 +69,7 @@ const manifest = {
     "deco-sites/vtex-seo/sections/Content/Faq.tsx": $$$$$$7,
     "deco-sites/vtex-seo/sections/Content/Features.tsx": $$$$$$8,
     "deco-sites/vtex-seo/sections/Content/Hero.tsx": $$$$$$9,
-    "deco-sites/vtex-seo/sections/Content/HeroSEO.tsx": $$$$$$10,
+    "deco-sites/vtex-seo/sections/Content/HeroSeo.tsx": $$$$$$10,
     "deco-sites/vtex-seo/sections/Content/ImageSection.tsx": $$$$$$11,
     "deco-sites/vtex-seo/sections/Content/Logos.tsx": $$$$$$12,
     "deco-sites/vtex-seo/sections/Content/RichText.tsx": $$$$$$13,
