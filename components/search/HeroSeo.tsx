@@ -1,32 +1,51 @@
 export interface Props {
   title?: string;
-  activeTitle: boolean;
-  activeReadMore: boolean;
+  categoryName?: string;
+  activeTitle?: boolean;
+  placement?: "Left" | "Center";
   /**
    * @format html
    */
   description?: string;
+  activeReadMore?: boolean;
 }
 
-export default function HeroFlats({
+export default function HeroSeo({
+  categoryName,
   title,
   activeTitle,
-  activeReadMore,
+  placement = "Center",
   description,
+  activeReadMore,
 }: Props) {
+  let align;
+
+  switch (placement) {
+    case "Left":
+      align = "start";
+      break;
+    case "Center":
+      align = "center";
+      break;
+    default:
+      break;
+  }
+
   return (
     <div>
-      <div className="mx-auto flex flex-col items-center gap-8 container sm:py-5 mt-5">
-        {activeTitle && (
-          <h1 className="inline-block text-28px leading-100% font-medium tracking--2.4px">
-            {title}
+      <div
+        className={`mx-auto flex flex-col items-${align} gap-2 container px-4 mt-5`}
+      >
+        {activeTitle && (title || categoryName) && (
+          <h1 className="inline-block text-[20px] leading-100% px-4 font-medium tracking--2.4px">
+            {title || categoryName}
           </h1>
         )}
         {description && (
-          <div id="hero-text">
+          <div className="hero-text">
             {activeReadMore
               ? (
-                <div class="max-w-[1220px] flex gap-[30px] relative mx-8 md:mx-auto mb-10">
+                <div class="flex gap-[30px] relative px-4 md:mx-auto mb-10">
                   <details className="peer absolute bottom-0 translate-y-full group ">
                     <summary className="text-sm text-neutral-1 font-lato py-2 px-6 border border-neutral-1 cursor-pointer list-none">
                       <span className="group-open:hidden">Ler mais</span>
@@ -36,7 +55,7 @@ export default function HeroFlats({
                   <div className="text-grey-500 h-[128px] peer-open:h-auto overflow-hidden pb-5 description">
                     <div>
                       <div
-                        className="ml-2 mt-2 flex flex-col gap-2"
+                        className="mt-2 flex flex-col gap-2"
                         dangerouslySetInnerHTML={{ __html: description }}
                       />
                     </div>
@@ -46,7 +65,7 @@ export default function HeroFlats({
                 </div>
               )
               : (
-                <div className="max-w-[1220px] flex gap-[30px] relative mx-8 md:mx-auto">
+                <div className="flex gap-[30px] relative px-4 md:mx-auto">
                   <div
                     className="text-16px md:text-18px leading-150%"
                     dangerouslySetInnerHTML={{ __html: description }}
