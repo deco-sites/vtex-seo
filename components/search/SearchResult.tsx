@@ -8,6 +8,7 @@ import { useOffer } from "$store/sdk/useOffer.ts";
 import type { ProductListingPage } from "apps/commerce/types.ts";
 import { mapProductToAnalyticsItem } from "apps/commerce/utils/productToAnalyticsItem.ts";
 import ProductGallery, { Columns } from "../product/ProductGallery.tsx";
+import HeroSeo from "./HeroSeo.tsx";
 
 export interface Layout {
   /**
@@ -20,6 +21,21 @@ export interface Layout {
   columns?: Columns;
 }
 
+export interface HeroTop {
+  title?: string;
+  activeTitle?: boolean;
+  placement?: "Left" | "Center";
+  /** @format html */
+  description?: string;
+  activeReadMore?: boolean;
+}
+
+export interface HeroBottom {
+  /** @format html */
+  description?: string;
+  activeReadMore?: boolean;
+}
+
 export interface Props {
   /** @title Integration */
   page: ProductListingPage | null;
@@ -28,6 +44,10 @@ export interface Props {
 
   /** @description 0 for ?page=0 as your first page */
   startingPage?: 0 | 1;
+
+  heroSeo?: typeof HeroSeo;
+  heroTop?: HeroTop;
+  heroBottom?: HeroBottom;
 }
 
 function NotFound() {
@@ -43,9 +63,13 @@ function Result({
   layout,
   cardLayout,
   startingPage = 0,
+  heroSeo,
+  heroTop = { activeTitle: true },
+  heroBottom,
 }: Omit<Props, "page"> & { page: ProductListingPage }) {
   const { products, filters, breadcrumb, pageInfo, sortOptions } = page;
   const perPage = pageInfo.recordPerPage || products.length;
+  const categoryName = breadcrumb.itemListElement?.at(-1)?.name;
 
   const id = useId();
 
@@ -54,6 +78,17 @@ function Result({
 
   return (
     <>
+      <HeroSeo
+        {...{
+          ...heroSeo,
+          categoryName: categoryName,
+          title: heroTop?.title,
+          activeTitle: heroTop?.activeTitle,
+          placement: heroTop?.placement,
+          activeReadMore: heroTop?.activeReadMore,
+          description: heroTop?.description,
+        }}
+      />
       <div class="container px-4 sm:py-10">
         <SearchControls
           sortOptions={sortOptions}
@@ -101,6 +136,13 @@ function Result({
           </div>
         </div>
       </div>
+      <HeroSeo
+        {...{
+          ...heroSeo,
+          activeReadMore: heroBottom?.activeReadMore,
+          description: heroBottom?.description,
+        }}
+      />
       <SendEventOnView
         id={id}
         event={{
