@@ -48,7 +48,7 @@ function Result({
   startingPage = 0,
   maxVisiblePages = 5,
 }: Omit<Props, "page"> & { page: ProductListingPage }) {
-  const { products, filters, breadcrumb, pageInfo, sortOptions } = page;
+  const { products, filters, breadcrumb, pageInfo, sortOptions, seo } = page;
   const perPage = pageInfo.recordPerPage || products.length;
 
   const currentPage = pageInfo.currentPage ?? 1;
@@ -102,19 +102,23 @@ function Result({
               aria-label="previous page link"
               disabled={currentPage <= 1}
               rel="prev"
-              href={`?page=${currentPage - 1}`}
-              class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-2 border border-gray-400 rounded-full shadow"
+              href={currentPage <= 2
+                ? seo?.canonical?.split("?")[0]
+                : `?page=${currentPage - 1}`}
+              class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-3 border border-gray-400 rounded shadow"
             >
               <Icon id="ChevronLeft" size={24} strokeWidth={2} />
             </a>
-            {pages.map((page) => (
+            {pages.map((pageNumber) => (
               <a
-                key={page}
-                href={`?page=${page}`}
-                disabled={currentPage == page}
-                class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded-full shadow"
+                key={pageNumber}
+                href={pageNumber <= 1
+                  ? seo?.canonical?.split("?")[0]
+                  : `?page=${pageNumber}`}
+                disabled={currentPage == pageNumber}
+                class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded shadow"
               >
-                {page}
+                {pageNumber}
               </a>
             ))}
             <a
@@ -122,7 +126,7 @@ function Result({
               disabled={currentPage >= totalPages}
               rel="next"
               href={`?page=${currentPage + 1}`}
-              class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-2 border border-gray-400 rounded-full shadow"
+              class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-3 border border-gray-400 rounded shadow"
             >
               <Icon id="ChevronRight" size={24} strokeWidth={2} />
             </a>
