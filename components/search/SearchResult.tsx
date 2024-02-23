@@ -51,8 +51,22 @@ function Result({
   const { products, filters, breadcrumb, pageInfo, sortOptions, seo } = page;
   const perPage = pageInfo.recordPerPage || products.length;
 
+// Resolver tipagem
+//   const hasFilter = filters.some((filter) =>
+//   filter.values.some((value) => value.selected)
+// );
+const regex = /&filter\.[^&=]+/g;
+
+  const hasFilter = pageInfo.nextPage ? pageInfo.nextPage?.match(regex) : pageInfo.previousPage?.match(regex)
+
+
+
+
+
   const currentPage = pageInfo.currentPage ?? 1;
-  const totalPages = pageInfo.recordPerPage ? pageInfo.recordPerPage - 1 : 0;
+  const totalPages = pageInfo.recordPerPage
+    ? pageInfo?.records && Math.round(pageInfo.records / pageInfo.recordPerPage)
+    : 0;
 
   const id = useId();
 
@@ -61,7 +75,10 @@ function Result({
 
   const pages = [];
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-  const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+  const endPage = Math.min(
+    totalPages ? totalPages : 0,
+    startPage + maxVisiblePages - 1,
+  );
 
   if (endPage - startPage + 1 < maxVisiblePages) {
     startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -96,42 +113,79 @@ function Result({
           </div>
         </div>
 
-        <div class="flex justify-center my-4">
-          <div class="join gap-2">
-            <a
-              aria-label="previous page link"
-              disabled={currentPage <= 1}
-              rel="prev"
-              href={currentPage <= 2
-                ? seo?.canonical?.split("?")[0]
-                : `?page=${currentPage - 1}`}
-              class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-3 border border-gray-400 rounded shadow"
-            >
-              <Icon id="ChevronLeft" size={24} strokeWidth={2} />
-            </a>
-            {pages.map((pageNumber) => (
-              <a
-                key={pageNumber}
-                href={pageNumber <= 1
-                  ? seo?.canonical?.split("?")[0]
-                  : `?page=${pageNumber}`}
-                disabled={currentPage == pageNumber}
-                class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-5 border border-gray-400 rounded shadow"
-              >
-                {pageNumber}
-              </a>
-            ))}
-            <a
-              aria-label="next page link"
-              disabled={currentPage >= totalPages}
-              rel="next"
-              href={`?page=${currentPage + 1}`}
-              class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-3 border border-gray-400 rounded shadow"
-            >
-              <Icon id="ChevronRight" size={24} strokeWidth={2} />
-            </a>
-          </div>
-        </div>
+        {!hasFilter
+          ? (
+            <div class="flex justify-center my-4">
+              <div class="join gap-2">
+                <a
+                  aria-label="previous page link"
+                  disabled={currentPage <= 1}
+                  rel="prev"
+                  href={currentPage <= 2
+                    ? seo?.canonical?.split("?")[0]
+                    : `?page=${currentPage - 1}`}
+                  class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
+                >
+                  <Icon id="ChevronLeft" size={24} strokeWidth={2} />
+                </a>
+                {pages.map((pageNumber) => (
+                  <a
+                    key={pageNumber}
+                    href={pageNumber <= 1
+                      ? seo?.canonical?.split("?")[0]
+                      : `?page=${pageNumber}`}
+                    disabled={currentPage == pageNumber}
+                    class="mx-1 btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
+                  >
+                    {pageNumber}
+                  </a>
+                ))}
+                <a
+                  aria-label="next page link"
+                  disabled={totalPages ? currentPage >= totalPages : true}
+                  rel="next"
+                  href={`?page=${currentPage + 1}`}
+                  class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
+                >
+                  <Icon id="ChevronRight" size={24} strokeWidth={2} />
+                </a>
+              </div>
+            </div>
+          )
+          : (
+            <div class="flex justify-center my-4">
+              <div class="join gap-2">
+                <a
+                  aria-label="previous page link"
+                  disabled={currentPage <= 1}
+                  rel="prev"
+                  href={pageInfo.previousPage}
+                  class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
+                >
+                  <Icon id="ChevronLeft" size={24} strokeWidth={2} />
+                </a>
+                {pages.map((pageNumber) => (
+                  <a
+                    key={pageNumber}
+                    href={pageInfo.nextPage ? pageInfo.nextPage?.split("&page=")[0] + `&page=${pageNumber}` : pageInfo.previousPage?.split("&page=")[0] + `&page=${pageNumber}`}
+                    disabled={currentPage == pageNumber}
+                    class="mx-1 btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
+                  >
+                    {pageNumber}
+                  </a>
+                ))}
+                <a
+                  aria-label="next page link"
+                  disabled={totalPages ? currentPage >= totalPages : true}
+                  rel="next"
+                  href={pageInfo.nextPage}
+                  class="btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow"
+                >
+                  <Icon id="ChevronRight" size={24} strokeWidth={2} />
+                </a>
+              </div>
+            </div>
+          )}
       </div>
       <SendEventOnView
         id={id}
