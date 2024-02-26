@@ -11,7 +11,6 @@ import ProductGallery, { Columns } from "../product/ProductGallery.tsx";
 import { AppContext } from "../../apps/site.ts";
 import HeroSeo from "./HeroSeo.tsx";
 
-
 export interface Layout {
   /**
    * @description Use drawer for mobile like behavior on desktop. Aside for rendering the filters alongside the products
