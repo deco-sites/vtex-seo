@@ -51,17 +51,15 @@ function Result({
   const { products, filters, breadcrumb, pageInfo, sortOptions, seo } = page;
   const perPage = pageInfo.recordPerPage || products.length;
 
-// Resolver tipagem
-//   const hasFilter = filters.some((filter) =>
-//   filter.values.some((value) => value.selected)
-// );
-const regex = /&filter\.[^&=]+/g;
+  // Resolver tipagem
+  //   const hasFilter = filters.some((filter) =>
+  //   filter.values.some((value) => value.selected)
+  // );
+  const regex = /&filter\.[^&=]+/g;
 
-  const hasFilter = pageInfo.nextPage ? pageInfo.nextPage?.match(regex) : pageInfo.previousPage?.match(regex)
-
-
-
-
+  const hasFilter = pageInfo.nextPage
+    ? pageInfo.nextPage?.match(regex)
+    : pageInfo.previousPage?.match(regex);
 
   const currentPage = pageInfo.currentPage ?? 1;
   const totalPages = pageInfo.recordPerPage
@@ -167,7 +165,11 @@ const regex = /&filter\.[^&=]+/g;
                 {pages.map((pageNumber) => (
                   <a
                     key={pageNumber}
-                    href={pageInfo.nextPage ? pageInfo.nextPage?.split("&page=")[0] + `&page=${pageNumber}` : pageInfo.previousPage?.split("&page=")[0] + `&page=${pageNumber}`}
+                    href={pageInfo.nextPage
+                      ? pageInfo.nextPage?.split("&page=")[0] +
+                        `&page=${pageNumber}`
+                      : pageInfo.previousPage?.split("&page=")[0] +
+                        `&page=${pageNumber}`}
                     disabled={currentPage == pageNumber}
                     class="mx-1 btn bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
                   >
