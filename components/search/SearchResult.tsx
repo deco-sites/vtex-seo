@@ -8,6 +8,8 @@ import { useOffer } from "$store/sdk/useOffer.ts";
 import type { ProductListingPage } from "apps/commerce/types.ts";
 import { mapProductToAnalyticsItem } from "apps/commerce/utils/productToAnalyticsItem.ts";
 import ProductGallery, { Columns } from "../product/ProductGallery.tsx";
+import { AppContext } from "../../apps/site.ts";
+import HeroSeo from "./HeroSeo.tsx";
 
 export interface Layout {
   /**
@@ -18,6 +20,21 @@ export interface Layout {
    * @description Number of products per line on grid
    */
   columns?: Columns;
+}
+
+export interface HeroTop {
+  title?: string;
+  activeTitle?: boolean;
+  placement?: "Left" | "Center";
+  /** @format html */
+  description?: string;
+  activeReadMore?: boolean;
+}
+
+export interface HeroBottom {
+  /** @format html */
+  description?: string;
+  activeReadMore?: boolean;
 }
 
 export interface Props {
@@ -31,6 +48,9 @@ export interface Props {
 
   /** @description max nunber of items in pagination */
   maxVisiblePages?: number;
+  heroSeo?: typeof HeroSeo;
+  heroTop?: HeroTop;
+  heroBottom?: HeroBottom;
 }
 
 function NotFound() {
@@ -41,15 +61,31 @@ function NotFound() {
   );
 }
 
+export const loader = (
+  props: Props,
+  _req: Request,
+  ctx: AppContext,
+) => {
+  if (!props.page || !props.page.products.length) {
+    ctx.response.status = 404;
+  }
+
+  return { ...props };
+};
+
 function Result({
   page,
   layout,
   cardLayout,
   startingPage = 0,
   maxVisiblePages = 5,
+  heroSeo,
+  heroTop = { activeTitle: true },
+  heroBottom,
 }: Omit<Props, "page"> & { page: ProductListingPage }) {
   const { products, filters, breadcrumb, pageInfo, sortOptions, seo } = page;
   const perPage = pageInfo.recordPerPage || products.length;
+  const categoryName = breadcrumb.itemListElement?.at(-1)?.name;
 
   // Resolver tipagem
   //   const hasFilter = filters.some((filter) =>
@@ -88,6 +124,17 @@ function Result({
 
   return (
     <>
+      <HeroSeo
+        {...{
+          ...heroSeo,
+          categoryName: categoryName,
+          title: heroTop?.title,
+          activeTitle: heroTop?.activeTitle,
+          placement: heroTop?.placement,
+          activeReadMore: heroTop?.activeReadMore,
+          description: heroTop?.description,
+        }}
+      />
       <div class="container px-4 sm:py-10">
         <SearchControls
           sortOptions={sortOptions}
@@ -189,6 +236,13 @@ function Result({
             </div>
           )}
       </div>
+      <HeroSeo
+        {...{
+          ...heroSeo,
+          activeReadMore: heroBottom?.activeReadMore,
+          description: heroBottom?.description,
+        }}
+      />
       <SendEventOnView
         id={id}
         event={{
@@ -213,7 +267,7 @@ function Result({
 }
 
 function SearchResult({ page, ...props }: Props) {
-  if (!page) {
+  if (!page || !page.products.length) {
     return <NotFound />;
   }
 
