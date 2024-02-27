@@ -56,6 +56,7 @@ function ProductShelf({
     4: "w-1/4",
     5: "w-1/5",
   };
+
   return (
     <div class="w-full container py-8 flex flex-col gap-6 lg:py-10">
       <Header
