@@ -253,9 +253,11 @@ function ProductCard({
               )
               : (
                 <ul
-                  class={`flex items-center gap-2 w-full overflow-auto p-3 ${
+                  class={`flex items-center gap-2 w-full overflow-auto py-3 px-1 ${
                     align === "center" ? "justify-center" : "justify-start"
-                  } ${l?.onMouseOver?.showSkuSelector ? "lg:hidden" : ""}`}
+                  } ${
+                    l?.onMouseOver?.showSkuSelector ? "lg:hidden" : ""
+                  } min-h-[50px]`}
                 >
                   {skuSelector}
                 </ul>
@@ -296,7 +298,7 @@ function ProductCard({
                 )
                 : (
                   <div
-                    class="truncate text-sm lg:text-sm text-neutral"
+                    class="truncate text-sm lg:text-sm text-base opacity-70"
                     dangerouslySetInnerHTML={{ __html: description ?? "" }}
                   />
                 )}
@@ -333,7 +335,7 @@ function ProductCard({
         {l?.elementsPositions?.skuSelector === "Bottom" && (
           <>
             <ul
-              class={`flex items-center gap-2 w-full ${
+              class={`flex flex-col items-left gap-2 w-full ${
                 align === "center" ? "justify-center" : "justify-between"
               } ${l?.onMouseOver?.showSkuSelector ? "lg:hidden" : ""}`}
             >
