@@ -1,5 +1,5 @@
 import { clx } from "$store/sdk/clx.ts";
-import { Section } from "deco/blocks/section.ts";
+import type { Section } from "deco/blocks/section.ts"; // Declare a importação como type
 import type { ComponentChildren } from "preact";
 import { flex } from "../../constants.tsx";
 
@@ -41,27 +41,29 @@ export interface Props {
   };
 }
 
-function Section(
-  { gap, direction, align, justify, wrap, children, sectionChildrens }: Props,
-) {
+function SectionComponent({
+  gap,
+  direction,
+  align,
+  justify,
+  wrap,
+  children,
+  sectionChildrens,
+}: Props) {
   return (
     <div
       class={clx(
         "w-full flex",
         gap?.mobile && flex.gap.mobile[gap.mobile],
         gap?.desktop && flex.gap.desktop[gap.desktop],
-        direction?.mobile &&
-          flex.direction.mobile[direction.mobile],
-        direction?.desktop &&
-          flex.direction.desktop[direction.desktop],
+        direction?.mobile && flex.direction.mobile[direction.mobile],
+        direction?.desktop && flex.direction.desktop[direction.desktop],
         align?.mobile && flex.align.mobile[align.mobile],
-        align?.desktop &&
-          flex.align.desktop[align.desktop],
+        align?.desktop && flex.align.desktop[align.desktop],
         justify?.mobile && flex.justify.mobile[justify.mobile],
-        justify?.desktop &&
-          flex.justify.desktop[justify.desktop],
+        justify?.desktop && flex.justify.desktop[justify.desktop],
         wrap?.mobile && flex.wrap.mobile[wrap.mobile],
-        wrap?.desktop && flex.wrap.desktop[wrap.desktop],
+        wrap?.desktop && flex.wrap.desktop[wrap.desktop]
       )}
     >
       {children}
@@ -73,4 +75,4 @@ function Section(
   );
 }
 
-export default Section;
+export default SectionComponent;

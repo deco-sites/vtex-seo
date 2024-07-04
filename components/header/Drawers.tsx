@@ -23,17 +23,16 @@ export interface Props {
   platform: ReturnType<typeof usePlatform>;
 }
 
-const Aside = (
-  { title, onClose, children }: {
-    title: string;
-    onClose?: () => void;
-    children: ComponentChildren;
-  },
-) => (
-  <div
-    class="bg-base-100 grid grid-rows-[auto_1fr] h-full divide-y max-w-[100vw]"
-    style={{ marginTop: headerHeight }}
-  >
+const Aside = ({
+  title,
+  onClose,
+  children,
+}: {
+  title: string;
+  onClose?: () => void;
+  children: ComponentChildren;
+}) => (
+  <div class="bg-base-100 grid grid-rows-[auto_1fr] h-full divide-y max-w-[100vw]">
     <Suspense
       fallback={
         <div class="w-screen flex items-center justify-center">
@@ -79,11 +78,11 @@ function Drawers({ menu, searchbar, children, platform }: Props) {
       <Drawer // right drawer
         class="drawer-end"
         open={displayCart.value !== false}
-        onClose={() => displayCart.value = false}
+        onClose={() => (displayCart.value = false)}
         aside={
           <Aside
             title="Minha sacola"
-            onClose={() => displayCart.value = false}
+            onClose={() => (displayCart.value = false)}
           >
             <Cart platform={platform} />
           </Aside>
